@@ -11,7 +11,9 @@ import (
 
 func GetRunescapeProfile(username string) (*profile.RunescapeProfile, error) {
 
-	r, err := http.Get("https://apps.runescape.com/runemetrics/profile/profile?user=Natria&activities=20")
+	url := "https://apps.runescape.com/runemetrics/profile/profile?user=" + username + "&activities=20"
+
+	r, err := http.Get(url)
 	if err != nil {
 		return nil, errors.New("Request failed.")
 	}
@@ -21,13 +23,13 @@ func GetRunescapeProfile(username string) (*profile.RunescapeProfile, error) {
 
 	p := profile.RunescapeProfile{}
 	if err := json.Unmarshal(body, &p); err != nil {
-		return nil, errors.New("Failed to unmarshal JSON %v")
+		return nil, errors.New("Failed to unmarshal JSON.")
 	}
 
 	isValid := profile.ProfileIsValid(p)
 
 	if !isValid {
-		return nil, errors.New("Failed to retrieve profile")
+		return nil, errors.New("Failed to retrieve profile.")
 	}
 
 	return &p, nil

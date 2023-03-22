@@ -2,13 +2,19 @@ package main
 
 import (
 	"fmt"
-	"log"
-
 	"github.com/LiamSutton/go-rs/services"
+	"github.com/LiamSutton/go-rs/utils"
+	"log"
 )
 
 func main() {
-	runescapeProfile, err := services.GetRunescapeProfile("Natria")
+
+	username, err := utils.ReadUsername()
+	if err != nil {
+		log.Fatalf("[ReadUsername]: %v\n", err)
+	}
+
+	runescapeProfile, err := services.GetRunescapeProfile(username)
 	if err != nil {
 		log.Fatalf("[GetRunescapeProfile]: %v\n", err)
 	}
@@ -16,8 +22,3 @@ func main() {
 	fmt.Println(runescapeProfile.Name)
 
 }
-
-// func PrettyPrint(i interface{}) string {
-// 	s, _ := json.MarshalIndent(i, "", "\t")
-// 	return string(s)
-// }
