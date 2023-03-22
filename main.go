@@ -4,55 +4,36 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+
+	"github.com/LiamSutton/go-rs/models"
 )
 
-type RunescapeProfileResponse struct {
-	Magic            int `json:"magic"`
-	Questsstarted    int `json:"questsstarted"`
-	Totalskill       int `json:"totalskill"`
-	Questscomplete   int `json:"questscomplete"`
-	Questsnotstarted int `json:"questsnotstarted"`
-	Totalxp          int `json:"totalxp"`
-	Ranged           int `json:"ranged"`
-	Activities       []struct {
-		Date    string `json:"date"`
-		Details string `json:"details"`
-		Text    string `json:"text"`
-	} `json:"activities"`
-	Skillvalues []struct {
-		Level int `json:"level"`
-		Xp    int `json:"xp"`
-		Rank  int `json:"rank"`
-		ID    int `json:"id"`
-	} `json:"skillvalues"`
-	Name        string `json:"name"`
-	Rank        string `json:"rank"`
-	Melee       int    `json:"melee"`
-	Combatlevel int    `json:"combatlevel"`
-	LoggedIn    string `json:"loggedIn"`
-}
 
 func main() {
-  r, err := http.Get("https://apps.runescape.com/runemetrics/profile/profile?user=Natria&activities=20")
-  if err != nil {
-    fmt.Println("No response from request")
-  }
+	r, err := http.Get("https://apps.runescape.com/runemetrics/profile/profile?user=Natria&activities=20")
+	if err != nil {
+    log.Fatalf("Request failed: %v", err)
+	}
 
-  defer r.Body.Close()
-  body, err := ioutil.ReadAll(r.Body)
+	defer r.Body.Close()
+	body, err := ioutil.ReadAll(r.Body)
 
-  var profile RunescapeProfileResponse
-  if err := json.Unmarshal(body, &profile); err != nil {
-    fmt.Println("Cannot unmarshal JSON")
-  }
+  p := profile.RunescapeProfile{}
+	if err := json.Unmarshal(body, &p); err != nil {
+    log.Fatalf("Failed to unmarshal JSON: %v", err)
+	}
   
-  prettyResponse := PrettyPrint(profile)
-  fmt.Println(prettyResponse)
+  isValid := profile.ProfileIsValid(p)
+  if isValid {
+    fmt.Printf("Retrieved profile: %s\n", p.Name)
+  } else {
+    log.Fatalf("Failed to retrieve profile.")
+  }
 }
 
 func PrettyPrint(i interface{}) string {
-  s,_ := json.MarshalIndent(i, "", "\t")
-  return string(s)
+	s, _ := json.MarshalIndent(i, "", "\t")
+	return string(s)
 }
-
