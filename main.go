@@ -14,6 +14,7 @@ func main() {
 	}
 
 	fmt.Println(runescapeProfile.Name)
+
 }
 
 // func PrettyPrint(i interface{}) string {
