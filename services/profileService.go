@@ -21,14 +21,14 @@ func GetRunescapeProfile(username string) (*profile.RunescapeProfile, error) {
 
 	p := profile.RunescapeProfile{}
 	if err := json.Unmarshal(body, &p); err != nil {
-    return nil, errors.New("Failed to unmarshal JSON %v")
+		return nil, errors.New("Failed to unmarshal JSON %v")
 	}
-  
-  isValid := profile.ProfileIsValid(p)
-  
-  if !isValid {
-    return nil, errors.New("Failed to retrieve profile")
-  }
 
-  return &p, nil
+	isValid := profile.ProfileIsValid(p)
+
+	if !isValid {
+		return nil, errors.New("Failed to retrieve profile")
+	}
+
+	return &p, nil
 }

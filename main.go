@@ -8,12 +8,12 @@ import (
 )
 
 func main() {
-  runescapeProfile,err := services.GetRunescapeProfile("Natria")
-  if err != nil {
-    log.Fatalf("[GetRunescapeProfile]: %v\n", err)
-  }
+	runescapeProfile, err := services.GetRunescapeProfile("Natria")
+	if err != nil {
+		log.Fatalf("[GetRunescapeProfile]: %v\n", err)
+	}
 
-  fmt.Println(runescapeProfile.Name)
+	fmt.Println(runescapeProfile.Name)
 }
 
 // func PrettyPrint(i interface{}) string {
